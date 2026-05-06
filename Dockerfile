@@ -42,9 +42,11 @@ RUN curl -sSf https://temporal.download/cli.sh | sh \
 
 WORKDIR /app
 
-# Install dependencies first (best for layer caching)
+# Install dependencies first (best for layer caching). --ignore-scripts skips the
+# postinstall fix-node-pty hook, which is macOS-only and would fail here because
+# scripts/ isn't copied until the next layer.
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 # Source for the build
 COPY . .
