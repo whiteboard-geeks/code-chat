@@ -1,5 +1,13 @@
 import { IS_PLATFORM } from "../constants/config";
 
+// When the app is served from a subpath (e.g. /code-chat/), Vite injects
+// import.meta.env.BASE_URL = '/code-chat/'. Prepend this to absolute paths
+// so /api/, /ws, /shell calls reach the backend through the same prefix.
+const _baseUrl = (import.meta.env && import.meta.env.BASE_URL) || '/';
+const _basePrefix = _baseUrl === '/' ? '' : _baseUrl.replace(/\/$/, '');
+export const withBase = (path) =>
+  typeof path === 'string' && path.startsWith('/') ? _basePrefix + path : path;
+
 // Utility function for authenticated API calls
 export const authenticatedFetch = (url, options = {}) => {
   const token = localStorage.getItem('auth-token');
@@ -15,7 +23,7 @@ export const authenticatedFetch = (url, options = {}) => {
     defaultHeaders['Authorization'] = `Bearer ${token}`;
   }
 
-  return fetch(url, {
+  return fetch(withBase(url), {
     ...options,
     headers: {
       ...defaultHeaders,
@@ -34,13 +42,13 @@ export const authenticatedFetch = (url, options = {}) => {
 export const api = {
   // Auth endpoints (no token required)
   auth: {
-    status: () => fetch('/api/auth/status'),
-    login: (username, password) => fetch('/api/auth/login', {
+    status: () => fetch(withBase('/api/auth/status')),
+    login: (username, password) => fetch(withBase('/api/auth/login'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     }),
-    register: (username, password) => fetch('/api/auth/register', {
+    register: (username, password) => fetch(withBase('/api/auth/register'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
@@ -100,7 +108,7 @@ export const api = {
     const token = localStorage.getItem('auth-token');
     const params = new URLSearchParams({ q: query, limit: String(limit) });
     if (token) params.set('token', token);
-    return `/api/providers/search/sessions?${params.toString()}`;
+    return withBase(`/api/providers/search/sessions?${params.toString()}`);
   },
   createProject: (projectData) =>
     authenticatedFetch('/api/projects/create-project', {
