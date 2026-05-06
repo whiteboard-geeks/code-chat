@@ -34,7 +34,7 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
+          navigator.serviceWorker.register('%BASE_URL%sw.js', { scope: '%BASE_URL%' })
             .then(registration => {
               console.log('SW registered: ', registration);
             })
