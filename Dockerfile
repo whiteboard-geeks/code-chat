@@ -42,14 +42,18 @@ RUN curl -sSf https://temporal.download/cli.sh | sh \
 
 WORKDIR /app
 
-# Install dependencies first (best for layer caching). --ignore-scripts skips the
-# postinstall fix-node-pty hook, which is macOS-only and would fail here because
-# scripts/ isn't copied until the next layer.
+# Install dependencies. --ignore-scripts skips lifecycle hooks that don't apply
+# inside the container: the macOS-only fix-node-pty postinstall, and husky's
+# prepare hook (no .git here, would fail). We then explicitly rebuild the few
+# native modules whose install steps actually matter.
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
 
 # Source for the build
 COPY . .
+
+# Native modules need their build steps run manually since we suppressed lifecycle hooks.
+RUN npm rebuild better-sqlite3 node-pty
 
 # Build with subpath base so assets and runtime URLs are prefixed with /code-chat/
 ENV VITE_BASE_URL=/code-chat/
