@@ -40,6 +40,9 @@ RUN curl -sSf https://temporal.download/cli.sh | sh \
     && cp /root/.temporalio/bin/temporal /usr/local/bin/temporal \
     && rm -rf /root/.temporalio
 
+# Claude Code CLI — the Agent SDK spawns this binary at runtime
+RUN npm install -g @anthropic-ai/claude-code
+
 WORKDIR /app
 
 # Install dependencies. --ignore-scripts skips lifecycle hooks that don't apply
