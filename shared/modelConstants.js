@@ -11,18 +11,23 @@
  * - API format ('claude-sonnet-4.5') - used by slash commands for display
  */
 export const CLAUDE_MODELS = {
-  // Models in SDK format (what the actual SDK accepts)
+  // Models in SDK format (what the actual SDK accepts).
+  // The bare aliases ('opus', 'sonnet', 'haiku') always resolve to the latest
+  // version Anthropic ships in that family. Pin explicit versions when you
+  // want reproducible behavior across upstream model bumps.
   OPTIONS: [
-    { value: "opus", label: "Opus" },
-    { value: "sonnet", label: "Sonnet" },
-    { value: "haiku", label: "Haiku" },
-    { value: "claude-opus-4-6", label: "Opus 4.6" },
+    { value: "claude-opus-4-7", label: "Opus 4.7 (latest)" },
+    { value: "claude-sonnet-4-6", label: "Sonnet 4.6" },
+    { value: "claude-haiku-4-5-20251001", label: "Haiku 4.5" },
+    { value: "opus", label: "Opus (alias → latest)" },
+    { value: "sonnet", label: "Sonnet (alias → latest)" },
+    { value: "haiku", label: "Haiku (alias → latest)" },
     { value: "opusplan", label: "Opus Plan" },
     { value: "sonnet[1m]", label: "Sonnet [1M]" },
     { value: "opus[1m]", label: "Opus [1M]" },
   ],
 
-  DEFAULT: "opus",
+  DEFAULT: "claude-opus-4-7",
 };
 
 /**

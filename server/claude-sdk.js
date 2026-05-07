@@ -202,8 +202,8 @@ function mapCliOptionsToSDK(options = {}) {
 
   sdkOptions.disallowedTools = settings.disallowedTools || [];
 
-  // Map model (default to sonnet)
-  // Valid models: sonnet, opus, haiku, opusplan, sonnet[1m]
+  // Map model. CLAUDE_MODELS.DEFAULT is the canonical default; both bare
+  // aliases ('opus', 'sonnet') and pinned versions ('claude-opus-4-7') are valid.
   sdkOptions.model = options.model || CLAUDE_MODELS.DEFAULT;
   // Model logged at query start below
 
