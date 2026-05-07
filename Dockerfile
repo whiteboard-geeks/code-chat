@@ -63,10 +63,11 @@ RUN npm run build
 RUN useradd -m -u 1001 -s /bin/bash app \
     && chown -R app:app /app
 
-# Persistent state lives on volumes mounted by the host
-RUN mkdir -p /data /repos /home/app/.claude \
-    && chown -R app:app /data /repos /home/app/.claude
-VOLUME ["/data", "/repos", "/home/app/.claude"]
+# Persistent state lives on volumes mounted by the host. Repos go under
+# /home/app/ because CloudCLI restricts workspace paths to the user's home.
+RUN mkdir -p /data /home/app/repos /home/app/.claude \
+    && chown -R app:app /data /home/app/repos /home/app/.claude
+VOLUME ["/data", "/home/app/repos", "/home/app/.claude"]
 
 # Default DB path inside the data volume
 ENV DATABASE_PATH=/data/auth.db

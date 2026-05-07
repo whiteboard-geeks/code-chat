@@ -58,7 +58,7 @@ ExecStart=/usr/bin/docker run --name code-chat \
   -e INFISICAL_ENV=prod \
   -p 127.0.0.1:3001:3001 \
   -v /var/lib/code-chat/data:/data \
-  -v /var/lib/code-chat/repos:/repos \
+  -v /var/lib/code-chat/repos:/home/app/repos \
   -v /var/lib/code-chat/claude:/home/app/.claude \
   code-chat:latest
 ExecStop=/usr/bin/docker stop code-chat
