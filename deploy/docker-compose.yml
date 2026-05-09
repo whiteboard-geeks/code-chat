@@ -1,0 +1,30 @@
+# Local smoke-test for the code-chat container.
+#
+#   1. cp deploy/.env.example deploy/.env  (then fill in INFISICAL_CLIENT_ID/SECRET)
+#   2. cd deploy && docker compose up --build
+#   3. open http://localhost:3001
+#
+# This compose file is *not* used in production. wbg-apps runs the same image
+# directly from a systemd unit (see deploy/README.md).
+
+services:
+  code-chat:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: code-chat:local
+    env_file: .env
+    environment:
+      INFISICAL_ENV: dev          # 'prod' on wbg-apps
+    ports:
+      - "127.0.0.1:3001:3001"     # localhost-only; Caddy bridges to public
+    volumes:
+      - code-chat-data:/data
+      - code-chat-repos:/repos
+      - code-chat-claude:/home/app/.claude
+    restart: unless-stopped
+
+volumes:
+  code-chat-data:
+  code-chat-repos:
+  code-chat-claude:

@@ -1,0 +1,17 @@
+node_modules
+dist
+dist-server
+.git
+.github
+.husky
+.vscode
+.idea
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+coverage
+.eslintcache
+deploy/docker-compose.yml
+README.md
